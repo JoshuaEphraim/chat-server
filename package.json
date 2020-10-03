@@ -1,0 +1,24 @@
+{
+  "name": "chat-server",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "chat-server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "websocket": "^1.0.32"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaEphraim/chat-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoshuaEphraim/chat-server/issues"
+  },
+  "homepage": "https://github.com/JoshuaEphraim/chat-server#readme"
+}
