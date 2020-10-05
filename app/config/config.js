@@ -10,6 +10,9 @@ class Config {
                 case '--websocket-port':
                     this.websocketPort = argValue[1]
                     break
+                case '--redis-address':
+                    this.redisAddress = argValue[1]
+                    break
             }
         }
     }

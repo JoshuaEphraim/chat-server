@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <style>
+        .chatBlock {
+            width: 50%;
+            height: 50%;
+            margin: 5%;
+            border: thick solid;
+        }
+        .textBlock {
+            width: 30%;
+            margin: 5%;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+</div>
+<script>
+
+    const chatBlock = document.createElement('div');
+    chatBlock.classList.add('chatBlock');
+    document.getElementById('main').append(chatBlock);
+    const textBlock = document.createElement('textarea');
+    chatBlock.classList.add('textBlock');
+    document.getElementById('main').append(textBlock);
+
+    textBlock.addEventListener('keyup', function(event) {
+        if (event.code  === 'Enter') {
+            const message = this.value;
+            socket.send(message);
+            this.value = '';
+        }
+    });
+
+    let socket;
+    let connect = () => {
+        socket = new WebSocket('ws://localhost:{{ websocketPort }}', 'echo-protocol');
+        socket.onopen = function (e) {
+            console.log('[open] Connection established');
+        };
+        socket.onmessage = function (event) {
+            console.log(event.data);
+            chatBlock.innerHTML += `<p> - ${event.data}</p>`;
+        };
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log('[close] Connection died');
+                setTimeout(function () {
+                    connect();
+                }, 1000);
+            }
+        };
+        socket.onerror = function (error) {
+            console.log(`[error] ${error.message}`);
+            socket.close();
+        };
+    }
+    connect();
+</script>
+</body>
+</html>
