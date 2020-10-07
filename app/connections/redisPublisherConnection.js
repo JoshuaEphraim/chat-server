@@ -2,8 +2,8 @@ const RedisConnection = require("./redisConnection.js");
 
 let instance;
 module.exports = class RedisPublisherConnection extends RedisConnection {
-    constructor(redisAddress) {
-        super(redisAddress)
+    constructor(redisAddress, serviceProvider) {
+        super(redisAddress);
         if (instance) {
             return instance;
         }
@@ -12,16 +12,24 @@ module.exports = class RedisPublisherConnection extends RedisConnection {
 
         this.client.publishAsync = (message) =>
             new Promise((resolve) => {
-                this.client.publish(this.prefix, message, function(err, response) {
-                    if (err) console.log(err);
-                    if (response) {
-                        resolve(true);
-                    } else {
-                        resolve(false);
-                    }
+                this.client.publish(this.prefix, message, function (err) {
+                    resolve(err);
                 })
             });
 
+        this.client.on('ready', () => {
+            serviceProvider.newMessage = this.newMessage.bind(this);
+        })
+            .on('error', function (err) {
+                console.error('Redis error', err);
+            });
+
         return instance;
+    }
+
+    newMessage(message) {
+        this.client.publishAsync(message).then(err => {
+            if (err) console.error(err);
+        });
     }
 }

@@ -1,15 +1,14 @@
 {
   "name": "chat-server",
   "version": "1.0.0",
-  "description": "test",
+  "description": "",
   "main": "chat-server.js",
   "dependencies": {
     "express": "^4.17.1",
     "mustache-express": "^1.3.0",
     "redis": "^3.0.2",
     "uuid": "^8.3.1",
-    "websocket": "^1.0.32",
-    "ws": "^7.3.1"
+    "websocket": "^1.0.32"
   },
   "devDependencies": {},
   "scripts": {

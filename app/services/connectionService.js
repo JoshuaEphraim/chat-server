@@ -1,4 +1,4 @@
-const { v4:uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 
 module.exports = class ConnectionService {
     constructor() {
@@ -22,8 +22,8 @@ module.exports = class ConnectionService {
     }
 
     sendMessages(message) {
-        for (const connection of this.connections.values()) {
+        this.connections.forEach((connection) => {
             connection.send(message);
-        }
+        })
     }
 }

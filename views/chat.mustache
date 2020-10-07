@@ -6,13 +6,42 @@
     <style>
         .chatBlock {
             width: 50%;
-            height: 50%;
+            height: 60%;
             margin: 5%;
             border: thick solid;
+            overflow: scroll;
         }
+
+        #main {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chatBlock p {
+            margin-left: 15px;
+        }
+
         .textBlock {
-            width: 30%;
+            display: inline-block;
+            position: relative;
+            width: 40%;
             margin: 5%;
+        }
+
+        .textBlock button {
+            position: absolute;
+            bottom: 10px;
+            right: 0px;
+        }
+
+        .textBlock input {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
         }
     </style>
 </head>
@@ -24,41 +53,50 @@
     const chatBlock = document.createElement('div');
     chatBlock.classList.add('chatBlock');
     document.getElementById('main').append(chatBlock);
-    const textBlock = document.createElement('textarea');
-    chatBlock.classList.add('textBlock');
+    const textBlock = document.createElement('div');
+    textBlock.classList.add('textBlock');
     document.getElementById('main').append(textBlock);
+    const textbox = document.createElement('input');
+    textbox.type = 'text';
+    textBlock.append(textbox);
+    const submitButton = document.createElement('button');
+    submitButton.innerHTML = 'submit'
+    textBlock.append(submitButton);
 
-    textBlock.addEventListener('keyup', function(event) {
-        if (event.code  === 'Enter') {
-            const message = this.value;
-            socket.send(message);
-            this.value = '';
+    textbox.addEventListener('keyup', function (event) {
+        if (event.code === 'Enter') {
+            sendMessage();
         }
+    });
+    submitButton.addEventListener('click', () => {
+        sendMessage();
     });
 
     let socket;
-    let connect = () => {
+    const sendMessage = () => {
+        const message = textbox.value;
+        textbox.value = '';
+        if (!message) {
+            return;
+        }
+        socket.send(message);
+    }
+    const connect = () => {
         socket = new WebSocket('ws://localhost:{{ websocketPort }}', 'echo-protocol');
         socket.onopen = function (e) {
-            console.log('[open] Connection established');
+            console.log('[websocket] Connection established');
         };
         socket.onmessage = function (event) {
-            console.log(event.data);
             chatBlock.innerHTML += `<p> - ${event.data}</p>`;
         };
         socket.onclose = function (event) {
-            if (event.wasClean) {
-                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-                console.log('[close] Connection died');
-                setTimeout(function () {
-                    connect();
-                }, 1000);
-            }
+            console.log('[websocket] Connection closed');
+            setTimeout(function () {
+                connect();
+            }, 1000);
         };
         socket.onerror = function (error) {
             console.log(`[error] ${error.message}`);
-            socket.close();
         };
     }
     connect();
