@@ -1,4 +1,4 @@
-# Chart-server
+# Chat-server
 
 Simple chat server on node.js. 
 Can handle any number of connections to exchange messages between them.
