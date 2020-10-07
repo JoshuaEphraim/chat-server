@@ -15,7 +15,7 @@ module.exports = class RedisSubscriberConnection extends RedisConnection {
                 connectionService.sendMessages(message));
         })
             .on('error', function (err) {
-                console.error('Redis error', err);
+                console.error('[redis] error', err);
             });
 
         return instance;

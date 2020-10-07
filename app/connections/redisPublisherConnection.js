@@ -21,7 +21,7 @@ module.exports = class RedisPublisherConnection extends RedisConnection {
             serviceProvider.newMessage = this.newMessage.bind(this);
         })
             .on('error', function (err) {
-                console.error('Redis error', err);
+                console.error('[redis] error', err);
             });
 
         return instance;
