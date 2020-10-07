@@ -25,6 +25,8 @@ Also you can run server with redis pub/sub support
 $ node chat-server.js --http-port=8888 --websocket-port=9999 --redis-address=127.0.0.1:6379
 ```
 
+Now you can connect to your chat in your browser on localhost:8888
+
 ### Docker environment
 Clone repository.
 Build Docker image.
@@ -44,4 +46,6 @@ Also you can run server with redis pub/sub support
 ```sh
 $ docker run --rm --net=host chat-server:latest --http-port=8888 --websocket-port=9999 --redis-address=127.0.0.1:6379
 ```
+
+Now you can connect to your chat in your browser on localhost:8888
 
